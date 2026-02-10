@@ -2,14 +2,14 @@
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { Modal } from '@wordpress/components';
+import { Modal, Button } from '@wordpress/components';
 import { useSelect } from '@wordpress/data';
 import { store as editorStore } from '@wordpress/editor';
 import { store as coreStore } from '@wordpress/core-data';
 
 const SocialCardPreview = ( { onClose } ) => {
-	const { title, excerpt, imageUrl, siteUrl } = useSelect( ( select ) => {
-		const { getEditedPostAttribute } = select( editorStore );
+	const { title, excerpt, imageUrl, siteUrl, postUrl } = useSelect( ( select ) => {
+		const { getEditedPostAttribute, getPermalink } = select( editorStore );
 		const featuredMediaId = getEditedPostAttribute( 'featured_media' );
 
 		let featuredImageUrl = '';
@@ -26,6 +26,7 @@ const SocialCardPreview = ( { onClose } ) => {
 			excerpt: getEditedPostAttribute( 'excerpt' ) || '',
 			imageUrl: featuredImageUrl,
 			siteUrl: select( coreStore ).getSite()?.url || '',
+			postUrl: getPermalink() || '',
 		};
 	}, [] );
 
@@ -33,16 +34,15 @@ const SocialCardPreview = ( { onClose } ) => {
 	const truncatedExcerpt =
 		excerpt.length > 200 ? excerpt.substring( 0, 200 ) + '…' : excerpt;
 
+	const shareUrl = `https://x.com/intent/tweet?url=${ encodeURIComponent( postUrl ) }&text=${ encodeURIComponent( title ) }`;
+
 	return (
 		<Modal
-			title={ __( 'Social Card Preview', 'social-card-preview' ) }
+			title={ __( 'X Preview', 'social-card-preview' ) }
 			onRequestClose={ onClose }
 			size="medium"
 		>
 			<div className="social-card-preview">
-				<h3 className="social-card-preview__heading">
-					{ __( 'X / Twitter', 'social-card-preview' ) }
-				</h3>
 				<div className="social-card-preview__card social-card-preview__card--twitter">
 					{ imageUrl && (
 						<img
@@ -64,28 +64,15 @@ const SocialCardPreview = ( { onClose } ) => {
 					</div>
 				</div>
 
-				<h3 className="social-card-preview__heading">
-					{ __( 'Facebook', 'social-card-preview' ) }
-				</h3>
-				<div className="social-card-preview__card social-card-preview__card--facebook">
-					{ imageUrl && (
-						<img
-							className="social-card-preview__image"
-							src={ imageUrl }
-							alt=""
-						/>
-					) }
-					<div className="social-card-preview__content">
-						<span className="social-card-preview__domain">
-							{ domain }
-						</span>
-						<span className="social-card-preview__title">
-							{ title }
-						</span>
-						<span className="social-card-preview__description">
-							{ truncatedExcerpt }
-						</span>
-					</div>
+				<div className="social-card-preview__actions">
+					<Button
+						variant="primary"
+						href={ shareUrl }
+						target="_blank"
+						rel="noopener noreferrer"
+					>
+						{ __( 'Share on X', 'social-card-preview' ) }
+					</Button>
 				</div>
 			</div>
 		</Modal>
