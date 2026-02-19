@@ -4,7 +4,7 @@ Adds a "Social Card Preview" option to the WordPress editor Preview dropdown, sh
 
 This plugin is part of the article [How to add custom entries to the editor Preview dropdown](https://developer.wordpress.org/news/2026/02/how-to-add-custom-entries-to-the-editor-preview-dropdown/) on the WordPress developer blog 
 
-_It is only for educational purposes and not meant to be used in production._
+_It is only for educational purposes and not meant to be used in production. For questions, please contact @bph via [WPSlack](https://make.wordpress.org/chat/) Account required._
 
 ## Features
 
@@ -34,7 +34,7 @@ npm run start
 You can test locally with WordPress Playground:
 
 ```bash
-npx @wp-playground/cli@latest server --auto-mount
+npx @wp-playground/cli@latest server --auto-mount --login
 ```
 
 ## License
